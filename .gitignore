@@ -2,3 +2,4 @@
 **/__pycache__/
 .python-version
 discord_bot_database.pickle
+DISCORD_BOT_TOKEN
