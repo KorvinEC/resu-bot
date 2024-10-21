@@ -1,0 +1,4 @@
+.git
+**/__pycache__/
+.python-version
+discord_bot_database.pickle
