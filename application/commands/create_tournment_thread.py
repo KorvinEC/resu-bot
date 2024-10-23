@@ -14,16 +14,12 @@ async def create_tournment_thread(interaction: Interaction, name: str | None = N
     # Create a thread under the command message
 
     if not interaction.channel:
-        embed = Embed(
-            title="Error", description="Channel does not exists", color=Color.red()
-        )
+        embed = Embed(title="Error", description="Channel does not exists", color=Color.red())
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
     if not isinstance(interaction.channel, TextChannel):
-        embed = Embed(
-            title="Error", description="Not a text channel", color=Color.red()
-        )
+        embed = Embed(title="Error", description="Not a text channel", color=Color.red())
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
@@ -49,6 +45,4 @@ async def create_tournment_thread(interaction: Interaction, name: str | None = N
 
 def setup(tree: CommandTree):
     print("Setting up create_tournment_thread command")
-    tree.command(name="create_tournment_thread", description="Create tournment thread")(
-        create_tournment_thread
-    )
+    tree.command(name="create_tournment_thread", description="Create tournment thread")(create_tournment_thread)

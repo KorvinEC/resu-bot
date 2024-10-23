@@ -12,9 +12,7 @@ def flatten[T](iterable: Iterable[T]) -> Generator[T, None, None]:
             yield item
 
 
-def create_teams(
-    players: list[Player], team_size=5
-) -> tuple[list[dict[RolesType, Player | None]], set[Player]]:
+def create_teams(players: list[Player], team_size=5) -> tuple[list[dict[RolesType, Player | None]], set[Player]]:
     roles = get_args(RolesType)
     primary_roles: dict[RolesType, list[Player]] = {role: [] for role in roles}
     secondary_roles: dict[RolesType, list[Player]] = {role: [] for role in roles}
@@ -33,9 +31,7 @@ def create_teams(
         elif player.secondary_role is not None:
             secondary_roles[player.secondary_role].append(player)
 
-    teams: list[TeamType] = [
-        {role: None for role in roles} for _ in range(len(players) // team_size)
-    ]
+    teams: list[TeamType] = [{role: None for role in roles} for _ in range(len(players) // team_size)]
 
     # Primary roles
 
@@ -49,10 +45,7 @@ def create_teams(
             # Remove the selected player from the pool
             primary_roles[role].remove(selected_player)
 
-            if (
-                selected_player.secondary_role is not None
-                and selected_player.secondary_role == "fill"
-            ):
+            if selected_player.secondary_role is not None and selected_player.secondary_role == "fill":
                 autofill_players.remove(selected_player)
             elif selected_player.secondary_role is not None:
                 secondary_roles[selected_player.secondary_role].remove(selected_player)
@@ -60,9 +53,7 @@ def create_teams(
     # Secondary roles
 
     for role in roles:
-        random_players = random.sample(
-            secondary_roles[role], len(secondary_roles[role])
-        )
+        random_players = random.sample(secondary_roles[role], len(secondary_roles[role]))
         filtered_teams = list(filter(lambda team: team[role] is None, teams))  # type: ignore
         random_teams = random.sample(filtered_teams, len(filtered_teams))
 

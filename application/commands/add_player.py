@@ -16,17 +16,13 @@ async def add_player(
 ):
     # Create a thread under the command message
     if interaction.channel_id is None:
-        embed = Embed(
-            title="Error", description="Chaneel does not have id", color=Color.red()
-        )
+        embed = Embed(title="Error", description="Chaneel does not have id", color=Color.red())
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
     # Create a thread under the command message
     if interaction.channel_id not in DATABASE.data:
-        embed = Embed(
-            title="Error", description="No such channel in database", color=Color.red()
-        )
+        embed = Embed(title="Error", description="No such channel in database", color=Color.red())
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
@@ -60,4 +56,3 @@ async def add_player(
 def setup(tree: CommandTree):
     print("Setting up add_player command")
     tree.command(name="add_player", description="Add player to current thread")(add_player)
-

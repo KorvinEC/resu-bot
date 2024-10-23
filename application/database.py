@@ -6,7 +6,7 @@ from application.types import Player
 
 class DictDatabase:
     data: dict[int, list[Player]]
-    DATABASE_FILENAME: str =  "discord_bot_database.pickle"
+    DATABASE_FILENAME: str = "discord_bot_database.pickle"
 
     def __init__(self, database_dict: dict[int, list[Player]]) -> None:
         self.data = database_dict

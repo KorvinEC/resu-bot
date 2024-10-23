@@ -1,23 +1,14 @@
 from discord import Interaction, Embed, Color
-from discord.app_commands import (
-    autocomplete,
-    Choice,
-    check,
-    CommandTree
-)
+from discord.app_commands import autocomplete, Choice, check, CommandTree
 
 from application.commands import tree
 from application.commands.checks import is_admin
 from application.database import DATABASE
 
 
-async def kick_autocomplete(
-    interaction: Interaction, current: str
-) -> list[Choice[str]]:
+async def kick_autocomplete(interaction: Interaction, current: str) -> list[Choice[str]]:
     if interaction.channel_id is None:
-        embed = Embed(
-            title="Error", description="Chaneel does not have id", color=Color.red()
-        )
+        embed = Embed(title="Error", description="Chaneel does not have id", color=Color.red())
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return []
 
@@ -30,11 +21,7 @@ async def kick_autocomplete(
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return []
 
-    options = [
-        str(player.uuid)
-        for player in DATABASE.data[interaction.channel_id]
-        if current in str(player.uuid)
-    ]
+    options = [str(player.uuid) for player in DATABASE.data[interaction.channel_id] if current in str(player.uuid)]
     return [Choice(name=item, value=item) for item in options]
 
 
@@ -45,9 +32,7 @@ async def kick(
     user_uuid: str,
 ):
     if interaction.channel_id is None:
-        embed = Embed(
-            title="Error", description="Chaneel does not have id", color=Color.red()
-        )
+        embed = Embed(title="Error", description="Chaneel does not have id", color=Color.red())
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
