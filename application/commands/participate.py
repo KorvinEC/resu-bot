@@ -1,15 +1,8 @@
-import pickle
-
-from discord import Interaction, Embed, Color
-from discord.app_commands import (
-    describe,
-)
-
-from application.commands import tree, DATABASE, DATABASE_FILENAME
 from discord import Interaction, Embed, Color
 from discord.app_commands import describe, CommandTree
 
 from application.types import Player, PrimaryRoleType, SecondaryRoleType
+from application.database import DATABASE
 
 
 @describe(opgg_url="OpGG link", primary_role="Primary role")
@@ -38,10 +31,8 @@ async def participate(
         interaction.user.id, opgg_url, primary_role, secondary_role
     )
 
-    DATABASE[interaction.channel_id].append(player)
-
-    with open(DATABASE_FILENAME, "wb") as file:
-        pickle.dump(DATABASE, file)
+    DATABASE.data[interaction.channel_id].append(player)
+    DATABASE.dump_pickle()
 
     embdes = [
         Embed(

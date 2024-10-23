@@ -6,8 +6,8 @@ from discord.app_commands import (
     CommandTree
 )
 
-from application.database import DATABASE
 from application.commands.checks import is_admin
+from application.database import DATABASE
 
 
 async def kick_autocomplete(
@@ -20,7 +20,7 @@ async def kick_autocomplete(
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return []
 
-    if interaction.channel_id not in DATABASE:
+    if interaction.channel_id not in DATABASE.data:
         embed = Embed(
             title="Error",
             description="This channel does not have players",
@@ -31,7 +31,7 @@ async def kick_autocomplete(
 
     options = [
         str(player.uuid)
-        for player in DATABASE[interaction.channel_id]
+        for player in DATABASE.data[interaction.channel_id]
         if current in str(player.uuid)
     ]
     return [Choice(name=item, value=item) for item in options]
@@ -50,7 +50,7 @@ async def kick(
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
-    if interaction.channel_id not in DATABASE:
+    if interaction.channel_id not in DATABASE.data:
         embed = Embed(
             title="Error",
             description="This channel does not have players",
@@ -59,11 +59,11 @@ async def kick(
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
-    for player in DATABASE[interaction.channel_id]:
+    for player in DATABASE.data[interaction.channel_id]:
         if str(player.uuid) != user_uuid:
             continue
 
-        DATABASE[interaction.channel_id].remove(player)
+        DATABASE.data[interaction.channel_id].remove(player)
 
         embed = Embed(
             title="Success",

@@ -45,7 +45,6 @@ async def on_ready():
         print(f"Exception: {e}")
 
 
-# TODO: Doesn't work
 @client.event
 async def on_guild_available(guild):
     # Sync the commands with the guild when the bot is ready

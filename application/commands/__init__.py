@@ -1,4 +1,3 @@
-from application.commands.main import run, client, tree, DATABASE_FILENAME, DATABASE
 from application.commands.add_player import setup as setup_add_player
 from application.commands.create_tournment_thread import setup as setup_create_tournment_thread
 from application.commands.generate_team import setup as setup_generate_teams

@@ -2,11 +2,10 @@ from discord import Interaction, Embed, Color, User
 from discord.app_commands import check, CommandTree
 
 from application.types import Player, RolesType
-from application.commands import tree, DATABASE_FILENAME, DATABASE
 from application.commands.checks import is_admin
+from application.database import DATABASE
 
 
-@tree.command(name="add_player", description="Add player to current thread")
 @check(is_admin)
 async def add_player(
     interaction: Interaction,
@@ -41,10 +40,8 @@ async def add_player(
 
     player = Player.create_and_validate(user.id, opgg_url, primary_role, secondary_role)
 
-    DATABASE[interaction.channel_id].append(player)
-
-    with open(DATABASE_FILENAME, "wb") as file:
-        pickle.dump(DATABASE, file)
+    DATABASE.data[interaction.channel_id].append(player)
+    DATABASE.dump_pickle()
 
     embdes = [
         Embed(

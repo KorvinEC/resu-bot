@@ -6,6 +6,7 @@ from discord.app_commands import check, CheckFailure, CommandTree
 
 from application.commands.checks import is_admin
 from application.create_teams import create_teams
+from application.database import DATABASE
 
 
 @check(is_admin)
@@ -17,7 +18,7 @@ async def generate_team(interaction: Interaction):
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
-    players = DATABASE.get(interaction.channel_id, None)
+    players = DATABASE.data.get(interaction.channel_id, None)
 
     if players is None:
         embed = Embed(
