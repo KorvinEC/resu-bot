@@ -5,7 +5,14 @@ import randomname
 import os
 
 from discord import Intents, Client, Interaction, Embed, Color, User
-from discord.app_commands import CommandTree, autocomplete, describe, Choice
+from discord.app_commands import (
+    CommandTree,
+    autocomplete,
+    describe,
+    Choice,
+    check,
+    CheckFailure,
+)
 from discord.channel import TextChannel
 
 from application.types import Player, RolesType, PrimaryRoleType, SecondaryRoleType
@@ -31,7 +38,13 @@ async def on_ready():
         print(e)
 
 
+# Check if the user is an admin
+def is_admin(interaction: Interaction):
+    return interaction.user.guild_permissions.administrator
+
+
 @tree.command(name="create_tournment_thread", description="Create tournment thread")
+@check(is_admin)
 @describe(name="Tournment name")
 async def create_tournment_thread(interaction: Interaction, name: str | None = None):
     # Create a thread under the command message
@@ -123,6 +136,7 @@ async def participate(
 @tree.command(
     name="generate_team", description="Generate teams from people on this thread"
 )
+@check(is_admin)
 async def generate_team(interaction: Interaction):
     if interaction.channel_id is None:
         embed = Embed(
@@ -167,10 +181,12 @@ async def generate_team(interaction: Interaction):
         await interaction.response.send_message(embeds=embeds)
         return
 
-    description = "\n".join((
-        f"{player.discord_mention} {player.discord_opgg_url} {player.discord_roles}"
-        for player in leftover_players
-    ))
+    description = "\n".join(
+        (
+            f"{player.discord_mention} {player.discord_opgg_url} {player.discord_roles}"
+            for player in leftover_players
+        )
+    )
 
     embeds.append(
         Embed(title="Leftover players", description=description, color=Color.red())
@@ -180,7 +196,21 @@ async def generate_team(interaction: Interaction):
     return
 
 
+@generate_team.error
+async def is_admin_error(interaction: Interaction, error):
+    if isinstance(error, CheckFailure):
+        await interaction.response.send_message(
+            embed=Embed(
+                title="Error",
+                description="You do not have permission to use this command.",
+                color=Color.red(),
+            ),
+            ephemeral=True,
+        )
+
+
 @tree.command(name="add_player", description="Add player to current thread")
+@check(is_admin)
 async def add_player(
     interaction: Interaction,
     user: User,
@@ -284,6 +314,7 @@ async def kick_autocomplete(
 
 
 @tree.command(name="kick", description="Kick from current tournment")
+@check(is_admin)
 @autocomplete(user_uuid=kick_autocomplete)
 async def kick(
     interaction: Interaction,
