@@ -37,11 +37,7 @@ class Player:
 
     @property
     def discord_roles(self) -> str:
-        return (
-            f"[`{self.primary_role}`/`{self.secondary_role}`]"
-            if self.secondary_role
-            else f"[`{self.primary_role}`]"
-        )
+        return f"[`{self.primary_role}`/`{self.secondary_role}`]" if self.secondary_role else f"[`{self.primary_role}`]"
 
     @property
     def discord_mention(self) -> str:

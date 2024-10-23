@@ -6,9 +6,7 @@ from application.database import DATABASE
 
 async def list_players(interaction: Interaction):
     if interaction.channel_id is None:
-        embed = Embed(
-            title="Error", description="Chaneel does not have id", color=Color.red()
-        )
+        embed = Embed(title="Error", description="Chaneel does not have id", color=Color.red())
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
@@ -37,4 +35,3 @@ async def list_players(interaction: Interaction):
 def setup(tree: CommandTree):
     print(f"Setting up {list_players.__name__} command")
     tree.command(name="list_players", description="List players in current thread")(list_players)
-

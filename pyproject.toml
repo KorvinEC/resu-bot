@@ -4,3 +4,6 @@ venv = "."
 
 [tool.ruff]
 line-length = 140
+
+[tool.black]
+line-length = 140

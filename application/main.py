@@ -32,7 +32,7 @@ for setup in (
 
 
 @tree.command(name="test")
-async def test( interaction: Interaction):
+async def test(interaction: Interaction):
     await interaction.response.send_message(content="Test")
 
 

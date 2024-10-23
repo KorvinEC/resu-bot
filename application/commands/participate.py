@@ -13,9 +13,7 @@ async def participate(
     secondary_role: SecondaryRoleType = None,
 ):
     if interaction.channel_id is None:
-        embed = Embed(
-            title="Error", description="Chaneel does not have id", color=Color.red()
-        )
+        embed = Embed(title="Error", description="Chaneel does not have id", color=Color.red())
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
@@ -27,9 +25,7 @@ async def participate(
             color=Color.yellow(),
         )
 
-    player = Player.create_and_validate(
-        interaction.user.id, opgg_url, primary_role, secondary_role
-    )
+    player = Player.create_and_validate(interaction.user.id, opgg_url, primary_role, secondary_role)
 
     DATABASE.data[interaction.channel_id].append(player)
     DATABASE.dump_pickle()
@@ -50,4 +46,7 @@ async def participate(
 
 def setup(tree: CommandTree):
     print(f"Setting up {participate.__name__} command")
-    tree.command(name="participate", description="Participate in current current thread tournment")(participate)
+    tree.command(
+        name="participate",
+        description="Participate in current current thread tournment",
+    )(participate)
