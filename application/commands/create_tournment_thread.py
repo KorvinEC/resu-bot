@@ -1,12 +1,11 @@
-import pickle
 import randomname
 
 from discord import Interaction, Embed, Color
 from discord.app_commands import describe, check, CommandTree
 from discord.channel import TextChannel
 
-from application.commands import DATABASE, DATABASE_FILENAME
 from application.commands.checks import is_admin
+from application.database import DATABASE
 
 
 @check(is_admin)
@@ -36,10 +35,8 @@ async def create_tournment_thread(interaction: Interaction, name: str | None = N
         message=interaction.message,
         auto_archive_duration=60,  # Duration in minutes
     )
-    DATABASE[thread.id] = []
-
-    with open(DATABASE_FILENAME, "wb") as file:
-        pickle.dump(DATABASE, file)
+    DATABASE.data[thread.id] = []
+    DATABASE.dump_pickle()
 
     embed = Embed(
         title="Success",

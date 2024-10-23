@@ -1,7 +1,6 @@
 from discord import Interaction, Embed, Color
 from discord.app_commands import CommandTree
 
-from application.commands import tree, DATABASE
 from application.database import DATABASE
 
 
@@ -13,7 +12,7 @@ async def list_players(interaction: Interaction):
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
-    if interaction.channel_id not in DATABASE:
+    if interaction.channel_id not in DATABASE.data:
         embed = Embed(
             title="Error",
             description="This channel does not have players",
@@ -24,7 +23,7 @@ async def list_players(interaction: Interaction):
 
     embed = Embed(title="Players", color=Color.green())
 
-    for player in DATABASE[interaction.channel_id]:
+    for player in DATABASE.data[interaction.channel_id]:
         embed.add_field(
             name=player.uuid,
             value=f"{player.discord_mention} {player.discord_opgg_url} {player.discord_roles}",
